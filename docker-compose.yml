@@ -1,0 +1,23 @@
+version: "3"
+services:
+  db:
+    container_name: fastemplate_db
+    image: postgres:13-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: "fastemplate"
+      POSTGRES_PASSWORD: "fastemplate"
+      POSTGRES_DB: "fastemplate"
+
+  service:
+    image: "fastemplate:local"
+    container_name: fastemplate
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      DB_DSN: "postgresql+asyncpg://fastemplate:fastemplate@fastemplate_db:5432/fastemplate"

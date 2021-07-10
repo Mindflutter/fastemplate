@@ -1,23 +1,28 @@
-FROM python:3.9
+FROM python:3.9-slim as builder
 
+# install helper packages
 RUN apt update && apt upgrade -y && \
-    apt install curl
-
-ENV PYTHONPATH=/opt/app/ \
-    POETRY_HOME=/etc/poetry \
-    POETRY_VERSION=1.1.6
+    apt install -y curl nano htop
 
 WORKDIR /opt/app/
 
+# set envs
+ENV PYTHONUNBUFFERED=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    POETRY_VERSION=1.1.7
+
 # install poetry
-RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py \
-    | python - --version $POETRY_VERSION
+RUN pip install poetry==$POETRY_VERSION
 
 # install package dependencies
-COPY poetry.lock .
-COPY pyproject.toml  .
-RUN $POETRY_HOME/bin/poetry install --verbose --no-dev --no-root
+COPY poetry.lock pyproject.toml ./
+COPY src ./
+RUN poetry config virtualenvs.create false && \
+    poetry install --verbose --no-root
 
-COPY src /opt/app/
+FROM builder AS runtime
 
-CMD $POETRY_HOME/bin/poetry run python main.py
+COPY --from=builder /opt/app/ /opt/app/
+WORKDIR /opt/app/
+
+CMD poetry run python main.py
