@@ -1,6 +1,7 @@
 import uvicorn
 from fastapi import FastAPI
 
+from db.database import db
 from routes import main_router
 from settings import LOGGING_CONFIG, settings
 
@@ -16,11 +17,11 @@ def get_app():
 
     @_app.on_event("startup")
     async def startup():
-        pass
+        await db.init()
 
     @_app.on_event("shutdown")
     async def shutdown():
-        pass
+        await db.close()
 
     return _app
 

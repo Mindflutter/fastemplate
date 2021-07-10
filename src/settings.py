@@ -1,8 +1,4 @@
-from pathlib import Path
-
 from pydantic import BaseSettings
-
-BASE_DIR = Path(__file__).parent.parent
 
 
 class Settings(BaseSettings):
@@ -11,6 +7,7 @@ class Settings(BaseSettings):
     RELOAD: bool = False
     WORKERS: int = 1
     LOG_LEVEL: str = "INFO"
+    DB_DSN: str = "postgresql+asyncpg://fastemplate:fastemplate@localhost:5432/fastemplate"
 
 
 settings = Settings()
