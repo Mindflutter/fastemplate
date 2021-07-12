@@ -26,7 +26,7 @@ def get_app():
     return _app
 
 
-if __name__ == "__main__":
+def main():
     uvicorn.run(
         app="asgi:app",
         workers=settings.WORKERS,
@@ -36,3 +36,7 @@ if __name__ == "__main__":
         log_config=LOGGING_CONFIG,
         access_log=True,
     )
+
+
+if __name__ == "__main__":
+    main()

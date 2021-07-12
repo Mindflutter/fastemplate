@@ -16,13 +16,13 @@ RUN pip install poetry==$POETRY_VERSION
 
 # install package dependencies
 COPY poetry.lock pyproject.toml ./
-COPY src ./
+COPY src src/
 RUN poetry config virtualenvs.create false && \
-    poetry install --verbose --no-root
+    poetry install --verbose
 
 FROM builder AS runtime
 
 COPY --from=builder /opt/app/ /opt/app/
 WORKDIR /opt/app/
 
-CMD poetry run python main.py
+CMD poetry run app
