@@ -1,8 +1,7 @@
 import logging
 from typing import Optional
 
-from sqlalchemy.ext.asyncio import (AsyncEngine, AsyncSession,
-                                    create_async_engine)
+from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
 from db.model_base import Base
@@ -14,7 +13,7 @@ logger = logging.getLogger(__name__)
 class Database:
     def __init__(self):
         self.engine: Optional[AsyncEngine] = None
-        self.session_maker: Optional[sessionmaker] = None
+        self.session_maker: sessionmaker
 
     async def init(self):
         logger.info("Initializing DB")
