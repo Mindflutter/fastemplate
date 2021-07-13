@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, delete, select, update
 
-from db import Base
 from db.database import db
+from db.model_base import Base
 from example.models import ExampleCreateResponse, ExamplePayload
 
 
@@ -43,7 +43,7 @@ class Example(Base):
             query = (
                 update(Example)
                 .where(Example.id == example_id)
-                .values(name=payload.name, ådescription=payload.description)
+                .values(name=payload.name, description=payload.description)
             )
             await session.execute(query)
             await session.commit()

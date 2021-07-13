@@ -1,7 +1,4 @@
-from sqlalchemy.orm import declarative_base
-
-Base = declarative_base()
-
-# models must be imported after declarative base init
-# pylint: disable=wrong-import-position
+# models must be imported before table creation
 from db.example import Example
+
+__all__ = ["Example"]

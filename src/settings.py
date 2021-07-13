@@ -26,5 +26,8 @@ LOGGING_CONFIG = {
             "stream": "ext://sys.stdout",
         },
     },
-    "loggers": {"": {"handlers": ["default"], "level": settings.LOG_LEVEL, "propagate": False}},
+    "loggers": {
+        "": {"handlers": ["default"], "level": settings.LOG_LEVEL, "propagate": False},
+        "sqlalchemy": {"handlers": ["default"], "level": "WARNING", "propagate": False},
+    },
 }
