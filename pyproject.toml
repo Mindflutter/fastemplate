@@ -17,6 +17,7 @@ fastapi = "^0.66.0"
 requests = "^2.23.0"
 sqlalchemy = { "extras" = ["mypy"], version = "^1.4.20" }
 asyncpg = "^0.23.0"
+alembic = "^1.6.5"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.4"
