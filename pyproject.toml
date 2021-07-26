@@ -36,11 +36,14 @@ follow_imports = "silent"
 show_column_numbers = true
 
 [[tool.mypy.overrides]]
-module = ["uvicorn"]
+module = ["uvicorn", "alembic.*"]
 ignore_missing_imports = true
 
 [tool.pylint.master]
 fail-under = 7.5
+ignore-paths = [".*/alembic/.*.py"]
+# ignore pydantic no-name-in-module error
+extension-pkg-allow-list = ["pydantic"]
 
 [tool.pylint.messages_control]
 disable = [
@@ -52,8 +55,6 @@ disable = [
     "too-few-public-methods",
     "logging-fstring-interpolation"
 ]
-# ignore pydantic no-name-in-module error
-extension-pkg-allow-list = ["pydantic"]
 
 [tool.pylint.miscellaneous]
 # only treat FIXMEs as worthy warnings
