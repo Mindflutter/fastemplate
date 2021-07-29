@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from pydantic import BaseSettings
 
 
@@ -8,9 +10,12 @@ class Settings(BaseSettings):
     WORKERS: int = 1
     LOG_LEVEL: str = "INFO"
     DB_DSN: str = "postgresql+asyncpg://fastemplate:fastemplate@localhost:5432/fastemplate"
+    MIGRATION_DSN: str = "postgresql+psycopg2://fastemplate:fastemplate@localhost:5432/fastemplate"
 
 
 settings = Settings()
+
+PROJECT_ROOT = Path(__file__).parents[1]
 
 LOGGING_CONFIG = {
     "version": 1,

@@ -30,8 +30,19 @@ jobs:
   test:
     needs: [lint]
     runs-on: ubuntu-latest
+    services:
+      test_db:
+        image: postgres:13-alpine
+        env:
+          POSTGRES_USER: test_db
+          POSTGRES_PASSWORD: test_db
+          POSTGRES_DB: test_db
+        ports:
+          - 5432:5432
     env:
       POETRY_VERSION: 1.1.7
+      DB_DSN: "postgresql+asyncpg://test_db:test_db@localhost:5432/test_db"
+      MIGRATION_DSN: "postgresql+psycopg2://test_db:test_db@localhost:5432/test_db"
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
