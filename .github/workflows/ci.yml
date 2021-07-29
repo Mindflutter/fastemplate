@@ -47,6 +47,11 @@ jobs:
       - name: Tests
         run: |
           make test
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          directory: ./tmp
+
 
   build:
     needs: [test]

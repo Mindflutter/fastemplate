@@ -31,7 +31,7 @@ format: black isort docformatter
 lint: pylint mypy
 
 cleanup:
-	rm -r ./tmp
+	rm -rf ./tmp
 
 build-local:
 	docker build -t $(PROJECT_NAME):$(DOCKER_BUILD_TAG) .
@@ -40,7 +40,7 @@ build-local:
 # XXX: run the DB in the same network or make sure external DB is accessible
 run-local-svc: build-local
 	docker rm -f $(PROJECT_NAME)
-	docker run -d --name $(PROJECT_NAME) $(PROJECT_NAME):$(DOCKER_BUILD_TAG)
+	docker run -d --rm -p 8000:8000 --name $(PROJECT_NAME) $(PROJECT_NAME):$(DOCKER_BUILD_TAG)
 
 # run all via docker-compose
 run-local:
