@@ -2,6 +2,7 @@ import uvicorn
 from fastapi import FastAPI
 
 from db.database import db
+from metrics import metrics_instrumentator
 from routes import main_router
 from settings import LOGGING_CONFIG, settings
 
@@ -14,6 +15,7 @@ def get_app():
     )
 
     _app.include_router(main_router)
+    metrics_instrumentator.instrument(_app).expose(_app, tags=["service"])
 
     @_app.on_event("startup")
     async def startup():
