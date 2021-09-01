@@ -12,26 +12,27 @@ app = "main:main"
 
 [tool.poetry.dependencies]
 python = "~3.9"
-uvicorn = "^0.14.0"
-fastapi = "^0.67.0"
+uvicorn = "^0.15.0"
+fastapi = "^0.68.1"
 requests = "^2.23.0"
-sqlalchemy = { "extras" = ["mypy"], version = "^1.4.20" }
-asyncpg = "^0.23.0"
+sqlalchemy = { "extras" = ["mypy"], version = "^1.4.23" }
+asyncpg = "^0.24.0"
 psycopg2-binary = "^2.9.1"
 alembic = "^1.6.5"
+prometheus-fastapi-instrumentator = "^5.7.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.4"
 pytest-cov = "^2.12.1"
 pytest-xdist = { extras = ["psutil"], version = "^2.2.1" }
-pylint = "^2.8.3"
+pylint = "^2.10.2"
 isort = "^5.8.0"
 docformatter = "^1.4"
 black = "^21.6b0"
 mypy = "^0.910"
-ipython = "^7.25.0"
+ipython = "^7.26.0"
 pytest-asyncio = "^0.15.1"
-httpx = "^0.18.2"
+httpx = "^0.19.0"
 
 [tool.mypy]
 plugins = ["sqlalchemy.ext.mypy.plugin"]

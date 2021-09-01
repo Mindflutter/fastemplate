@@ -9,7 +9,7 @@ WORKDIR /opt/app/
 # set envs
 ENV PYTHONUNBUFFERED=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
-    POETRY_VERSION=1.1.7
+    POETRY_VERSION=1.1.8
 
 # install poetry
 RUN pip install poetry==$POETRY_VERSION
