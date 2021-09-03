@@ -16,7 +16,7 @@ def test_migrations_stairway(alembic_config: Config):
     for revision in revisions:
         upgrade(alembic_config, revision.revision)
         # initial revision downgrade uses "-1"
-        downgrade(alembic_config, revision.down_revision or "-1")
+        downgrade(alembic_config, revision.down_revision or "-1")  # type: ignore
         upgrade(alembic_config, revision.revision)
 
     # downgrade to base (empty db)

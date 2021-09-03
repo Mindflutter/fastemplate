@@ -1,8 +1,6 @@
-import asyncio
 from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config, pool
-from sqlalchemy.ext.asyncio import AsyncEngine
 
 from alembic import context
 from db.model_base import Base
@@ -11,7 +9,8 @@ from db.model_base import Base
 # access to the values within the .ini file in use.
 from settings import settings
 
-config = context.config
+# XXX: mypy fails here, check on later versions of alembic
+config = context.config  # type: ignore
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
