@@ -2,6 +2,7 @@
 import asyncio
 
 import pytest
+import pytest_asyncio
 
 from alembic import config
 from alembic.command import downgrade, upgrade
@@ -30,7 +31,7 @@ def db_tables(alembic_config):
     downgrade(alembic_config, "base")
 
 
-@pytest.fixture(scope="session")
+@pytest_asyncio.fixture(scope="session")
 async def db_app():
     """A fixture for initializing app DB object for the entire test session."""
     await db.init()
@@ -47,7 +48,7 @@ def event_loop():
     return asyncio.get_event_loop()
 
 
-@pytest.fixture
+@pytest_asyncio.fixture
 async def db_data():
     """A fixture for populating test DB with test data.
 

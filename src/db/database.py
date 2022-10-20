@@ -45,7 +45,7 @@ class Database:
                     return
             except OSError:
                 logger.info("Waiting for DB connection...")
-                await asyncio.sleep(2 ** tries)
+                await asyncio.sleep(2**tries)
                 tries += 1
 
         logger.error("Awaited DB connection for too long, shutting down")

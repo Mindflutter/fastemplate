@@ -9,12 +9,12 @@ from db.model_base import Base
 # access to the values within the .ini file in use.
 from settings import settings
 
-# XXX: mypy fails here, check on later versions of alembic
-config = context.config  # type: ignore
+config = context.config
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
-fileConfig(config.config_file_name)
+# XXX: mypy fails here, check on later versions of alembic
+fileConfig(config.config_file_name)  # type: ignore
 
 # add your model's MetaData object here
 # for 'autogenerate' support

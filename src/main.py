@@ -2,7 +2,7 @@ import uvicorn
 from fastapi import FastAPI
 
 from db.database import db
-from metrics import metrics_instrumentator
+from metrics import metrics_instrumentator  # type: ignore
 from routes import main_router
 from settings import LOGGING_CONFIG, settings
 
