@@ -40,7 +40,7 @@ jobs:
         ports:
           - 5432:5432
     env:
-      POETRY_VERSION: 1.1.7
+      POETRY_VERSION: 1.2.0
       DB_DSN: "postgresql+asyncpg://test_db:test_db@localhost:5432/test_db"
       MIGRATION_DSN: "postgresql+psycopg2://test_db:test_db@localhost:5432/test_db"
     steps:
