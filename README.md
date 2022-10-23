@@ -1,6 +1,7 @@
 Fastemplate
 ===========
 
+![Python](https://img.shields.io/badge/python-3.10-blue.svg)
 ![CI](https://github.com/Mindflutter/fastemplate/actions/workflows/ci.yml/badge.svg)
 [![codecov](https://codecov.io/gh/Mindflutter/fastemplate/branch/master/graph/badge.svg?token=JUL44CDR4U)](https://codecov.io/gh/Mindflutter/fastemplate)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
