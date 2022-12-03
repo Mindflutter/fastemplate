@@ -14,7 +14,8 @@ from settings import PROJECT_ROOT, settings
 
 @pytest.fixture(scope="session")
 def alembic_config():
-    config_path = PROJECT_ROOT / "alembic.ini"
+    # make mypy happy by casting to str
+    config_path = str(PROJECT_ROOT / "alembic.ini")
     alembic_config = config.Config(config_path)
     alembic_config.set_main_option("sqlalchemy.url", settings.MIGRATION_DSN)
     return alembic_config
