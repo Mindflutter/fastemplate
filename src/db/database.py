@@ -1,7 +1,6 @@
 import asyncio
 import logging
 import sys
-from typing import Optional
 
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
@@ -13,22 +12,12 @@ logger = logging.getLogger(__name__)
 
 
 class Database:
-    def __init__(self):
-        self.engine: Optional[AsyncEngine] = None
-        self.session_maker: sessionmaker
+    def __init__(self, engine: AsyncEngine, session_maker: sessionmaker):
+        self.engine = engine
+        self.session_maker = session_maker
 
     async def init(self):
         logger.info("Initializing DB")
-        engine_options = {
-            # logging configured via settings
-            "echo": False,
-            "pool_recycle": 3600,
-            "pool_pre_ping": True,
-            "connect_args": {"timeout": 5},
-        }
-
-        self.engine = create_async_engine(settings.DB_DSN, **engine_options)
-        self.session_maker = sessionmaker(bind=self.engine, expire_on_commit=False, class_=AsyncSession)
         await self.wait_for_connection()
 
         # the DB schema and tables already exist in a real service, so this is here for convenience only
@@ -56,4 +45,14 @@ class Database:
             await self.engine.dispose()
 
 
-db = Database()
+engine_options = {
+    # logging configured via settings
+    "echo": False,
+    "pool_recycle": 3600,
+    "pool_pre_ping": True,
+    "connect_args": {"timeout": 5},
+}
+db_engine = create_async_engine(settings.DB_DSN, **engine_options)
+db_session_maker = sessionmaker(bind=db_engine, expire_on_commit=False, class_=AsyncSession)
+
+db = Database(db_engine, db_session_maker)
