@@ -4,5 +4,5 @@ router = APIRouter()
 
 
 @router.get("/")
-async def root():
+async def root() -> dict[str, str]:
     return {"message": "I am Root"}

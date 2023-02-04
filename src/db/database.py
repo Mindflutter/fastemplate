@@ -16,7 +16,7 @@ class Database:
         self.engine = engine
         self.session_maker = session_maker
 
-    async def init(self):
+    async def init(self) -> None:
         logger.info("Initializing DB")
         await self.wait_for_connection()
 
@@ -24,7 +24,7 @@ class Database:
         async with db.engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
 
-    async def wait_for_connection(self):
+    async def wait_for_connection(self) -> None:
         """DB connection exponential backoff method."""
         tries = 0
         while tries < settings.DB_CONN_TRIES:
@@ -40,7 +40,7 @@ class Database:
         logger.error("Awaited DB connection for too long, shutting down")
         sys.exit("DB connection timeout")
 
-    async def close(self):
+    async def close(self) -> None:
         if self.engine:
             await self.engine.dispose()
 

@@ -13,7 +13,7 @@ pylint:
 	find . -type f -name "*.py" | xargs poetry run pylint
 
 mypy:
-	poetry run mypy .
+	poetry run mypy ./src
 
 black:
 	poetry run black .

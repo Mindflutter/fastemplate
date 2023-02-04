@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 @router.post("/", status_code=201, response_model=ExampleCreateResponse, responses={409: DUPLICATE_RESPONSE})
-async def create_example(example_payload: ExamplePayload):
+async def create_example(example_payload: ExamplePayload) -> ExampleCreateResponse | JSONResponse:
     try:
         result = await Example.create(example_payload)
         return result
@@ -28,7 +28,7 @@ async def create_example(example_payload: ExamplePayload):
 
 
 @router.get("/{example_id}", response_model=ExampleGetResponse, responses={404: NOT_FOUND_RESPONSE})
-async def get_example(example_id: int = Path(None, gt=0)):
+async def get_example(example_id: int = Path(None, gt=0)) -> ExampleGetResponse | JSONResponse:
     try:
         result = await Example.get(example_id)
         return ExampleGetResponse.from_orm(result)
@@ -38,7 +38,7 @@ async def get_example(example_id: int = Path(None, gt=0)):
 
 
 @router.put("/{example_id}", responses={404: NOT_FOUND_RESPONSE})
-async def update_example(example_payload: ExamplePayload, example_id: int = Path(None, gt=0)):
+async def update_example(example_payload: ExamplePayload, example_id: int = Path(None, gt=0)) -> JSONResponse:
     try:
         await Example.update(example_id, example_payload)
     except NoResultFound:
@@ -47,7 +47,7 @@ async def update_example(example_payload: ExamplePayload, example_id: int = Path
 
 
 @router.delete("/{example_id}", responses={404: NOT_FOUND_RESPONSE})
-async def delete_example(example_id: int = Path(None, gt=0)):
+async def delete_example(example_id: int = Path(None, gt=0)) -> JSONResponse:
     try:
         await Example.delete(example_id)
     except NoResultFound:

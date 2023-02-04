@@ -7,7 +7,7 @@ from routes import main_router
 from settings import LOGGING_CONFIG, settings
 
 
-def get_app():
+def get_app() -> FastAPI:
     _app = FastAPI(
         title="Fastemplate",
         version="0.0.1",
@@ -18,17 +18,17 @@ def get_app():
     metrics_instrumentator.instrument(_app).expose(_app, tags=["service"])
 
     @_app.on_event("startup")
-    async def startup():
+    async def startup() -> None:
         await db.init()
 
     @_app.on_event("shutdown")
-    async def shutdown():
+    async def shutdown() -> None:
         await db.close()
 
     return _app
 
 
-def main():
+def main() -> None:
     uvicorn.run(
         app="asgi:app",
         workers=settings.WORKERS,
