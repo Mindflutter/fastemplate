@@ -3,6 +3,7 @@ import asyncio
 
 import pytest
 import pytest_asyncio
+from sqlalchemy import text
 
 from alembic import config
 from alembic.command import downgrade, upgrade
@@ -14,8 +15,7 @@ from settings import PROJECT_ROOT, settings
 
 @pytest.fixture(scope="session")
 def alembic_config():
-    # make mypy happy by casting to str
-    config_path = str(PROJECT_ROOT / "alembic.ini")
+    config_path = PROJECT_ROOT / "alembic.ini"
     alembic_config = config.Config(config_path)
     alembic_config.set_main_option("sqlalchemy.url", settings.MIGRATION_DSN)
     return alembic_config
@@ -64,5 +64,5 @@ async def db_data():
 
     async with db.session_maker() as session:
         for table in Base.metadata.sorted_tables:
-            await session.execute(f"TRUNCATE {table} RESTART IDENTITY CASCADE")
+            await session.execute(text(f"TRUNCATE {table} RESTART IDENTITY CASCADE"))
             await session.commit()

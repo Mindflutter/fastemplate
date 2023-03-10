@@ -5,13 +5,8 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.exc import IntegrityError, NoResultFound
 
 from db.example import Example
-from example.models import (
-    DUPLICATE_RESPONSE,
-    NOT_FOUND_RESPONSE,
-    ExampleCreateResponse,
-    ExampleGetResponse,
-    ExamplePayload,
-)
+from example.models import (DUPLICATE_RESPONSE, NOT_FOUND_RESPONSE, OK_RESPONSE, ExampleCreateResponse,
+                            ExampleGetResponse, ExamplePayload)
 
 router = APIRouter(prefix="/example")
 logger = logging.getLogger(__name__)
@@ -37,19 +32,21 @@ async def get_example(example_id: int = Path(None, gt=0)) -> ExampleGetResponse 
         return JSONResponse(status_code=404, content={"message": f"Example id {example_id} not found"})
 
 
-@router.put("/{example_id}", responses={404: NOT_FOUND_RESPONSE})
+@router.put("/{example_id}", responses={404: NOT_FOUND_RESPONSE, 200: OK_RESPONSE})
 async def update_example(example_payload: ExamplePayload, example_id: int = Path(None, gt=0)) -> JSONResponse:
     try:
         await Example.update(example_id, example_payload)
+        return JSONResponse(status_code=200, content={"message": f"Example {example_id} updated"})
     except NoResultFound:
         logger.error(f"Example id {example_id} not found")
         return JSONResponse(status_code=404, content={"message": f"Example id {example_id} not found"})
 
 
-@router.delete("/{example_id}", responses={404: NOT_FOUND_RESPONSE})
+@router.delete("/{example_id}", responses={404: NOT_FOUND_RESPONSE, 200: OK_RESPONSE})
 async def delete_example(example_id: int = Path(None, gt=0)) -> JSONResponse:
     try:
         await Example.delete(example_id)
+        return JSONResponse(status_code=200, content={"message": f"Example {example_id} deleted"})
     except NoResultFound:
         logger.error(f"Example id {example_id} not found")
         return JSONResponse(status_code=404, content={"message": f"Example id {example_id} not found"})

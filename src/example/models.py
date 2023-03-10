@@ -26,5 +26,10 @@ class ErrorResponse(BaseModel):
     message: str
 
 
+class OkResponse(BaseModel):
+    message: str
+
+
 NOT_FOUND_RESPONSE = {"model": ErrorResponse, "description": "Item was not found"}
 DUPLICATE_RESPONSE = {"model": ErrorResponse, "description": "Item already exists"}
+OK_RESPONSE = {"model": OkResponse, "description": "Success"}

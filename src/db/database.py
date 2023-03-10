@@ -2,8 +2,7 @@ import asyncio
 import logging
 import sys
 
-from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, create_async_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker, create_async_engine
 
 from db.model_base import Base
 from settings import settings
@@ -12,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 class Database:
-    def __init__(self, engine: AsyncEngine, session_maker: sessionmaker):
+    def __init__(self, engine: AsyncEngine, session_maker: async_sessionmaker):
         self.engine = engine
         self.session_maker = session_maker
 
@@ -53,6 +52,6 @@ engine_options = {
     "connect_args": {"timeout": 5},
 }
 db_engine = create_async_engine(settings.DB_DSN, **engine_options)
-db_session_maker = sessionmaker(bind=db_engine, expire_on_commit=False, class_=AsyncSession)
+db_session_maker = async_sessionmaker(bind=db_engine, expire_on_commit=False, class_=AsyncSession)
 
 db = Database(db_engine, db_session_maker)

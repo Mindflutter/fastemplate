@@ -1,21 +1,23 @@
-from sqlalchemy import Column, Integer, String, delete, select, update
+from sqlalchemy import String, delete, select, update
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import Mapped, mapped_column
 
 from db.database import db
 from db.model_base import Base
 from example.models import ExampleCreateResponse, ExamplePayload
 
 
-class Example(Base):
+class Example(Base):  # type: ignore
     __tablename__ = "example"
 
-    id = Column(Integer, autoincrement=True, primary_key=True, index=True)
-    name = Column(String(20), unique=True)
-    description = Column(String(1024))
+    id: Mapped[int] = mapped_column(autoincrement=True, primary_key=True, index=True)
+    name: Mapped[str] = mapped_column(String(30), unique=True)
+    description: Mapped[str | None] = mapped_column(String(1024))
 
     @classmethod
-    async def check_example_exists(cls, session, example_id: int) -> None:  # type: ignore
+    async def check_example_exists(cls, session: AsyncSession, example_id: int) -> None:
         # check if item exists in the db
-        check_query = select([1]).where(Example.id == example_id)
+        check_query = select(1).where(Example.id == example_id)
         results = await session.execute(check_query)
         # NoResultFound will be raised here if item does not exist
         results.one()
