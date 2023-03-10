@@ -11,7 +11,7 @@ Fastemplate
 A template for backend services 
 
 * Based on [FastAPI](https://fastapi.tiangolo.com/)
-* Uses [async SQLAlchemy](https://docs.sqlalchemy.org/en/14/orm/extensions/asyncio.html) for database interaction
+* Uses [SQLAlchemy 2](https://docs.sqlalchemy.org/en/20/index.html) for database interaction
 * Includes examples of:
   - API endpoints
   - DB initialization
