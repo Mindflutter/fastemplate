@@ -7,7 +7,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     env:
-      POETRY_VERSION: 1.2.0
+      POETRY_VERSION: 1.4.0
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -40,7 +40,7 @@ jobs:
         ports:
           - 5432:5432
     env:
-      POETRY_VERSION: 1.2.0
+      POETRY_VERSION: 1.4.0
       DB_DSN: "postgresql+asyncpg://test_db:test_db@localhost:5432/test_db"
       MIGRATION_DSN: "postgresql+psycopg2://test_db:test_db@localhost:5432/test_db"
     steps:
