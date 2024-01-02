@@ -49,7 +49,7 @@ engine_options = {
     "echo": False,
     "pool_recycle": 3600,
     "pool_pre_ping": True,
-    "connect_args": {"timeout": 5},
+    "connect_args": {"connect_timeout": 5},
 }
 db_engine = create_async_engine(settings.DB_DSN, **engine_options)
 db_session_maker = async_sessionmaker(bind=db_engine, expire_on_commit=False, class_=AsyncSession)

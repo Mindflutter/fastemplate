@@ -41,8 +41,7 @@ jobs:
           - 5432:5432
     env:
       POETRY_VERSION: 1.4.0
-      DB_DSN: "postgresql+asyncpg://test_db:test_db@localhost:5432/test_db"
-      MIGRATION_DSN: "postgresql+psycopg2://test_db:test_db@localhost:5432/test_db"
+      DB_DSN: "postgresql+psycopg://test_db:test_db@localhost:5432/test_db"
     steps:
       - name: Checkout code
         uses: actions/checkout@v2

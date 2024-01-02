@@ -1,4 +1,5 @@
 import logging
+from typing import Annotated
 
 from fastapi import APIRouter, Path
 from fastapi.responses import JSONResponse
@@ -23,17 +24,19 @@ async def create_example(example_payload: ExamplePayload) -> ExampleCreateRespon
 
 
 @router.get("/{example_id}", response_model=ExampleGetResponse, responses={404: NOT_FOUND_RESPONSE})
-async def get_example(example_id: int = Path(None, gt=0)) -> ExampleGetResponse | JSONResponse:
+async def get_example(example_id: Annotated[int, Path(title="Example ID", gt=0)]) -> ExampleGetResponse | JSONResponse:
     try:
         result = await Example.get(example_id)
-        return ExampleGetResponse.from_orm(result)
+        return ExampleGetResponse.model_validate(result)
     except NoResultFound:
         logger.error(f"Example id {example_id} not found")
         return JSONResponse(status_code=404, content={"message": f"Example id {example_id} not found"})
 
 
 @router.put("/{example_id}", responses={404: NOT_FOUND_RESPONSE, 200: OK_RESPONSE})
-async def update_example(example_payload: ExamplePayload, example_id: int = Path(None, gt=0)) -> JSONResponse:
+async def update_example(
+    example_payload: ExamplePayload, example_id: Annotated[int, Path(title="Example ID", gt=0)]
+) -> JSONResponse:
     try:
         await Example.update(example_id, example_payload)
         return JSONResponse(status_code=200, content={"message": f"Example {example_id} updated"})
@@ -43,7 +46,7 @@ async def update_example(example_payload: ExamplePayload, example_id: int = Path
 
 
 @router.delete("/{example_id}", responses={404: NOT_FOUND_RESPONSE, 200: OK_RESPONSE})
-async def delete_example(example_id: int = Path(None, gt=0)) -> JSONResponse:
+async def delete_example(example_id: Annotated[int, Path(title="Example ID", gt=0)]) -> JSONResponse:
     try:
         await Example.delete(example_id)
         return JSONResponse(status_code=200, content={"message": f"Example {example_id} deleted"})

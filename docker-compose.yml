@@ -20,4 +20,4 @@ services:
     depends_on:
       - db
     environment:
-      DB_DSN: "postgresql+asyncpg://fastemplate:fastemplate@fastemplate_db:5432/fastemplate"
+      DB_DSN: "postgresql+psycopg://fastemplate:fastemplate@fastemplate_db:5432/fastemplate"

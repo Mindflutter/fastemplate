@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from pydantic import BaseSettings
+from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
@@ -9,8 +9,7 @@ class Settings(BaseSettings):
     RELOAD: bool = False
     WORKERS: int = 1
     LOG_LEVEL: str = "INFO"
-    DB_DSN: str = "postgresql+asyncpg://fastemplate:fastemplate@localhost:5432/fastemplate"
-    MIGRATION_DSN: str = "postgresql+psycopg2://fastemplate:fastemplate@localhost:5432/fastemplate"
+    DB_DSN: str = "postgresql+psycopg://fastemplate:fastemplate@localhost:5432/fastemplate"
     DB_CONN_TRIES: int = 5
 
 

@@ -18,7 +18,15 @@ async def test_validation_error():
         response = await client.get("/example/WRONG")
     assert response.status_code == 422
     assert response.json() == {
-        "detail": [{"loc": ["path", "example_id"], "msg": "value is not a valid integer", "type": "type_error.integer"}]
+        "detail": [
+            {
+                "input": "WRONG",
+                "loc": ["path", "example_id"],
+                "msg": "Input should be a valid integer, unable to parse string " "as an integer",
+                "type": "int_parsing",
+                "url": "https://errors.pydantic.dev/2.5/v/int_parsing",
+            }
+        ]
     }
 
 
