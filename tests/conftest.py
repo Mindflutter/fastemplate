@@ -17,7 +17,7 @@ from settings import PROJECT_ROOT, settings
 def alembic_config():
     config_path = PROJECT_ROOT / "alembic.ini"
     alembic_config = config.Config(config_path)
-    alembic_config.set_main_option("sqlalchemy.url", settings.MIGRATION_DSN)
+    alembic_config.set_main_option("sqlalchemy.url", settings.DB_DSN)
     return alembic_config
 
 
