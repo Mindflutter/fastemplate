@@ -1,4 +1,4 @@
-FROM python:3.10-slim as builder
+FROM python:3.12-slim as builder
 
 # install helper / build dependency packages
 RUN apt update && apt upgrade -y && \
