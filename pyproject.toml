@@ -42,7 +42,7 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.alembic]
-script_location = "%(here)s/fastemplate/migrations"
+script_location = "%(here)s/migrations"
 prepend_sys_path = ["."]
 path_separator = "os"
 
@@ -97,5 +97,5 @@ ignore = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"fastemplate/migrations/*" = ["INP001", "ANN"]
+"migrations/*" = ["INP001", "ANN"]
 "tests/*" = ["S1", "ANN201", "PLR2004", "PLR0913"]

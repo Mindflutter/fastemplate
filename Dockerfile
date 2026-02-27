@@ -14,6 +14,7 @@ COPY pyproject.toml poetry.lock /app/
 RUN poetry config virtualenvs.create false && poetry install --only main --no-root
 
 COPY fastemplate /app/fastemplate
+COPY migrations /app/migrations
 COPY pyproject.toml /app/
 
 FROM builder AS runtime
