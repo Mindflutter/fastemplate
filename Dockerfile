@@ -1,28 +1,26 @@
-FROM python:3.12-slim as builder
+FROM python:3.13-alpine AS builder
 
-# install helper / build dependency packages
-RUN apt update && apt upgrade -y && \
-    apt install -y curl nano htop gcc python3-dev
+WORKDIR /app/
 
-WORKDIR /opt/app/
+ENV PYTHONFAULTHANDLER=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=on \
+    PIP_DEFAULT_TIMEOUT=100
 
-# set envs
-ENV PYTHONUNBUFFERED=1 \
-    PIP_DISABLE_PIP_VERSION_CHECK=1 \
-    POETRY_VERSION=1.7.1
+RUN pip --no-cache-dir install poetry poetry-plugin-export
 
-# install poetry
-RUN pip install poetry==$POETRY_VERSION
+COPY pyproject.toml poetry.lock /app/
 
-# install package dependencies
-COPY poetry.lock pyproject.toml ./
-COPY src src/
-RUN poetry config virtualenvs.create false && \
-    poetry install --verbose
+RUN poetry config virtualenvs.create false && poetry install --only main --no-root
+
+COPY fastemplate /app/fastemplate
+COPY pyproject.toml /app/
 
 FROM builder AS runtime
 
-COPY --from=builder /opt/app/ /opt/app/
-WORKDIR /opt/app/
+ARG APP_VERSION
+ENV APP_VERSION=$APP_VERSION
 
-CMD poetry run app
+WORKDIR /app/
+
+CMD ["python", "-m", "fastemplate.app"]

@@ -1,68 +1,64 @@
-# pylint: disable=redefined-outer-name
-import asyncio
+from collections.abc import AsyncIterator, Iterator
 
 import pytest
-import pytest_asyncio
+from asgi_lifespan import LifespanManager
+from fastapi import FastAPI
+from httpx import ASGITransport, AsyncClient
 from sqlalchemy import text
+from sqlalchemy.ext.asyncio import AsyncConnection
+from testcontainers.postgres import PostgresContainer
 
-from alembic import config
-from alembic.command import downgrade, upgrade
-from db import Example
-from db.database import db
-from db.model_base import Base
-from settings import PROJECT_ROOT, settings
-
-
-@pytest.fixture(scope="session")
-def alembic_config():
-    config_path = PROJECT_ROOT / "alembic.ini"
-    alembic_config = config.Config(config_path)
-    alembic_config.set_main_option("sqlalchemy.url", settings.DB_DSN)
-    return alembic_config
+from fastemplate.app import create_app
+from fastemplate.repositories.engine import Engine
+from fastemplate.repositories.tables import metadata
+from fastemplate.settings import Settings
 
 
 @pytest.fixture(scope="session")
-def db_tables(alembic_config):
-    """A fixture for creating / dropping all tables in an empty DB.
-
-    Up for entire test session
-    """
-    upgrade(alembic_config, "head")
-    yield
-    downgrade(alembic_config, "base")
-
-
-@pytest_asyncio.fixture(scope="session")
-async def db_app():
-    """A fixture for initializing app DB object for the entire test session."""
-    await db.init()
-    yield
-    await db.close()
+def postgres_dsn() -> Iterator[str]:
+    with PostgresContainer("postgres:18-alpine", driver="psycopg") as container:
+        yield container.get_connection_url()
 
 
 @pytest.fixture(scope="session")
-def event_loop():
-    """A fixture for overriding pytest.asyncio event loop.
-
-    One event loop is used by all tests.
-    """
-    return asyncio.get_event_loop()
+def settings(postgres_dsn: str) -> Settings:
+    return Settings(postgres_dsn=postgres_dsn)
 
 
-@pytest_asyncio.fixture
-async def db_data():
-    """A fixture for populating test DB with test data.
+@pytest.fixture(scope="session")
+async def test_app(settings: Settings) -> AsyncIterator[FastAPI]:
+    app = create_app(settings)
+    async with LifespanManager(app):
+        yield app
 
-    Test data is truncated at the end of each test.
-    """
-    async with db.session_maker() as session:
-        example = Example(name="test", description="description")
-        session.add(example)
-        await session.commit()
 
+@pytest.fixture(scope="session")
+async def test_client(test_app: FastAPI) -> AsyncIterator[AsyncClient]:
+    transport = ASGITransport(app=test_app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        yield client
+
+
+@pytest.fixture(scope="session")
+def engine(test_app: FastAPI) -> Engine:
+    return test_app.state.engine
+
+
+@pytest.fixture(scope="session")
+async def connection(engine: Engine) -> AsyncIterator[AsyncConnection]:
+    async with engine.get_connection() as conn:
+        yield conn
+
+
+@pytest.fixture(scope="session", autouse=True)
+async def create_tables(engine: Engine) -> None:
+    """Create all tables once before any tests run."""
+    async with engine.get_connection() as conn:
+        await conn.run_sync(metadata.create_all)
+
+
+@pytest.fixture(autouse=True)
+async def db_cleanup(connection: AsyncConnection) -> AsyncIterator[None]:
+    """Truncate all tables after each test."""
     yield
-
-    async with db.session_maker() as session:
-        for table in Base.metadata.sorted_tables:
-            await session.execute(text(f"TRUNCATE {table} RESTART IDENTITY CASCADE"))
-            await session.commit()
+    await connection.execute(text("TRUNCATE example RESTART IDENTITY CASCADE"))

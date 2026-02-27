@@ -1,8 +1,7 @@
-version: "3"
 services:
   db:
     container_name: fastemplate_db
-    image: postgres:13-alpine
+    image: postgres:18-alpine
     ports:
       - "5432:5432"
     environment:
@@ -20,4 +19,4 @@ services:
     depends_on:
       - db
     environment:
-      DB_DSN: "postgresql+psycopg://fastemplate:fastemplate@fastemplate_db:5432/fastemplate"
+      POSTGRES_DSN: "postgresql+psycopg://fastemplate:fastemplate@fastemplate_db:5432/fastemplate"

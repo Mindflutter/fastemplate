@@ -1,25 +1,36 @@
 Fastemplate
 ===========
 
-![Python](https://img.shields.io/badge/python-3.12-blue.svg)
+![Python](https://img.shields.io/badge/python-3.13-blue.svg)
 ![CI](https://github.com/Mindflutter/fastemplate/actions/workflows/ci.yml/badge.svg)
 [![codecov](https://codecov.io/gh/Mindflutter/fastemplate/branch/master/graph/badge.svg?token=JUL44CDR4U)](https://codecov.io/gh/Mindflutter/fastemplate)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Checked with mypy](http://www.mypy-lang.org/static/mypy_badge.svg)](http://mypy-lang.org/)
-[![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
-A template for backend services 
+[![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![Pydantic v2](https://img.shields.io/badge/Pydantic-v2-E92063?logo=pydantic&logoColor=white)](https://docs.pydantic.dev/)
+[![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-D71F00?logo=sqlalchemy&logoColor=white)](https://www.sqlalchemy.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
+
+A template for backend services
 
 * Based on [FastAPI](https://fastapi.tiangolo.com/)
-* Uses [SQLAlchemy 2](https://docs.sqlalchemy.org/en/20/index.html) for database interaction
+* Uses [SQLAlchemy 2](https://docs.sqlalchemy.org/en/20/index.html) (Core, async) for database interaction
+* Layered architecture: `api/` → `services/` → `repositories/` → database
+* Dependency injection via FastAPI `Depends()`
+* [Testcontainers](https://testcontainers-python.readthedocs.io/) for integration tests
 * Includes examples of:
-  - API endpoints
-  - DB initialization
-  - DB requests  
+  - CRUD API endpoints
+  - Database migrations (Alembic)
   - Dockerizing the service
-  - Useful Makefile targets
+  - CI with GitHub Actions
 
 ## Project setup
 
 * Install `docker`, `docker-compose`, `poetry`
-* Install project dependencies: `poetry install`
+* Install project dependencies: `make setup`
+* Start local services: `docker-compose up -d`
+* Run migrations: `poetry run alembic upgrade head`
+* Run tests: `make test`
+* Lint: `make lint`

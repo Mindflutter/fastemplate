@@ -6,62 +6,44 @@ jobs:
 
   lint:
     runs-on: ubuntu-latest
-    env:
-      POETRY_VERSION: 1.7.1
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Setup python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: '3.13'
       - name: Prepare environment
         run: |
-            pip install poetry==$POETRY_VERSION
-            poetry config virtualenvs.create false
-            poetry install --verbose
-      - name: Pylint
+          pip install poetry
+          poetry config virtualenvs.create false
+          poetry install --no-root
+      - name: Lint
         run: |
-          make pylint
-      - name: Mypy
-        run: |
-          make mypy
+          make lint
 
   test:
     needs: [lint]
     runs-on: ubuntu-latest
-    services:
-      test_db:
-        image: postgres:13-alpine
-        env:
-          POSTGRES_USER: test_db
-          POSTGRES_PASSWORD: test_db
-          POSTGRES_DB: test_db
-        ports:
-          - 5432:5432
-    env:
-      POETRY_VERSION: 1.7.1
-      DB_DSN: "postgresql+psycopg://test_db:test_db@localhost:5432/test_db"
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Setup python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: '3.13'
       - name: Prepare environment
         run: |
-          pip install poetry==$POETRY_VERSION
+          pip install poetry
           poetry config virtualenvs.create false
-          poetry install --verbose
+          poetry install --no-root
       - name: Tests
         run: |
           make test
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v5
         with:
           directory: ./tmp
-
 
   build:
     needs: [test]
@@ -73,5 +55,6 @@ jobs:
       uses: actions/checkout@v4
     - name: Build
       run: |
+        export APP_VERSION=$(git describe --tags 2>/dev/null || echo "dev")
         export SHORT_COMMIT_SHA=$(git rev-parse --short HEAD)
-        docker build -t fastemplate:$GITHUB_ACTOR-$SHORT_COMMIT_SHA .
+        docker build --build-arg APP_VERSION=$APP_VERSION -t fastemplate:$GITHUB_ACTOR-$SHORT_COMMIT_SHA .
