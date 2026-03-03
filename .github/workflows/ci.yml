@@ -25,6 +25,8 @@ jobs:
   test:
     needs: [lint]
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -44,6 +46,7 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           directory: ./tmp
+          use_oidc: true
 
   build:
     needs: [test]
