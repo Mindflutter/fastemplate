@@ -1,7 +1,6 @@
 [project]
 name = "fastemplate"
 version = "0.0.0"
-dynamic = ["version"]
 description = "A template for FastAPI based projects"
 requires-python = ">=3.13,<3.14"
 authors = [{ name = "Igor Golyanov", email = "thornograph@gmail.com" }]
@@ -36,10 +35,6 @@ dev = [
     { include-group = "lint" },
     { include-group = "tests" },
 ]
-
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
 
 [tool.alembic]
 script_location = "%(here)s/migrations"

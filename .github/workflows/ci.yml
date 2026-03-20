@@ -9,15 +9,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
       - name: Setup python
-        uses: actions/setup-python@v6
-        with:
-          python-version: '3.13'
+        run: uv python install 3.13
       - name: Prepare environment
-        run: |
-          pip install poetry
-          poetry config virtualenvs.create false
-          poetry install --no-root
+        run: uv sync --no-install-project
       - name: Lint
         run: |
           make lint
@@ -30,15 +27,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
       - name: Setup python
-        uses: actions/setup-python@v6
-        with:
-          python-version: '3.13'
+        run: uv python install 3.13
       - name: Prepare environment
-        run: |
-          pip install poetry
-          poetry config virtualenvs.create false
-          poetry install --no-root
+        run: uv sync --no-install-project
       - name: Tests
         run: |
           make test

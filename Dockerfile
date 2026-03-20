@@ -3,15 +3,14 @@ FROM python:3.13-alpine AS builder
 WORKDIR /app/
 
 ENV PYTHONFAULTHANDLER=1 \
-    PYTHONUNBUFFERED=1 \
-    PIP_DISABLE_PIP_VERSION_CHECK=on \
-    PIP_DEFAULT_TIMEOUT=100
+    PYTHONUNBUFFERED=1
 
-RUN pip --no-cache-dir install poetry poetry-plugin-export
+RUN pip install --no-cache-dir uv
 
-COPY pyproject.toml poetry.lock /app/
+COPY pyproject.toml uv.lock /app/
 
-RUN poetry config virtualenvs.create false && poetry install --only main --no-root
+ENV UV_PROJECT_ENVIRONMENT=/usr/local
+RUN uv sync --frozen --no-install-project --no-dev
 
 COPY fastemplate /app/fastemplate
 COPY migrations /app/migrations
