@@ -2,12 +2,14 @@ from __future__ import annotations
 
 import logging
 import sys
+from typing import override
 
 import loguru
 
 
 # Intercept logs from python standard logging module
 class InterceptHandler(logging.Handler):
+    @override
     def emit(self, record: logging.LogRecord) -> None:
         # Convert python logging record into a Loguru log
         try:

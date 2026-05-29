@@ -17,7 +17,7 @@ dependencies = [
 
 [dependency-groups]
 lint = [
-    "mypy>=1,<2",
+    "mypy>=2,<3",
     "ruff>=0,<1",
 ]
 tests = [
@@ -63,9 +63,19 @@ exclude_lines = [
 python_version = "3.13"
 plugins = ["pydantic.mypy"]
 strict = true
-show_error_codes = true
-namespace_packages = true
-disable_error_code = "import-untyped"
+
+enable_error_code = [
+    "unreachable",
+    "redundant-expr",
+    "redundant-cast",
+    "redundant-self",
+    "possibly-undefined",
+    "explicit-override",
+    "mutable-override",
+    "deprecated",
+    "unused-awaitable",
+    "ignore-without-code",
+]
 
 [[tool.mypy.overrides]]
 module = "tests.*"
