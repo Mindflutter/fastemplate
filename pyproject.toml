@@ -99,6 +99,7 @@ ignore = [
     "TD", "FIX", # todos
     "G004", # f-string logging
     "TRY400", # forces logger.exception() usage over logger.error()
+    "CPY001", # copyright notice
 ]
 
 [tool.ruff.lint.per-file-ignores]
