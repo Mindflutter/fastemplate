@@ -3,7 +3,7 @@ from collections.abc import AsyncIterator, Iterator
 import pytest
 from asgi_lifespan import LifespanManager
 from fastapi import FastAPI
-from httpx import ASGITransport, AsyncClient
+from httpx2 import ASGITransport, AsyncClient
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncConnection
 from testcontainers.postgres import PostgresContainer
